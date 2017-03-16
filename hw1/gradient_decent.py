@@ -1,10 +1,12 @@
 import csv
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 def gd_real(matrix,ans,option,a,numI,valid,lamd):
     w = np.ones([len(option)*10])
     #w = np.random.normal(0,1,[len(option)*10])
     #print w
+
     for i in range(500):
         loss = float(0)
         for j in range(valid):
@@ -29,6 +31,7 @@ def gd_real(matrix,ans,option,a,numI,valid,lamd):
     return w 
 
 def gd(matrix,ans,w,a,numI,valid,lamd):
+    print "Start Training"
     for i in range(100):
         for j in range(valid):
             loss = float(0)
@@ -43,10 +46,11 @@ def gd(matrix,ans,w,a,numI,valid,lamd):
             #print "Iter:",i,"; Batch:",j,"; Loss: ",loss
     return w
 
-def readfile(type):
+def readfile(type,filename):
     matrix = dict()
+    print "Reading file",filename
     if type =='train':
-        f = open('train.csv','r')
+        f = open(filename,'r')
         ans = []
         read = False
         for row in csv.reader(f):
@@ -73,7 +77,7 @@ def readfile(type):
         return matrix,ans
 
     elif type == 'test':
-        f = open('test_X.csv','r')
+        f = open(filename,'r')
         for row in csv.reader(f):
             if row[1] not in matrix:
                 matrix[row[1]]=[]
@@ -94,6 +98,7 @@ def readfile(type):
 
 def writefile(fileName, Y):
     with open(fileName, 'w') as f:
+        print "Output to",fileName
         writer = csv.writer(f)
         writer.writerows([['id','value']])
         for i in range(len(Y)):
@@ -103,6 +108,7 @@ def test(t_type,data,matrix,option):
     Y = []
     loss = 0
     if t_type == 'train':
+        print "Testing with validation set"
         base = 200
     else:
         base = 0
@@ -129,16 +135,25 @@ def test(t_type,data,matrix,option):
         return Y
 
 if __name__=='__main__':
-    matrix,ans = readfile('train')
-    option = ['PM2.5']
-    #weight = np.random.normal(0, 1, 10)
-    weight = np.ones(10)
-    weight = gd(matrix,ans,weight,1e-5,1,240,0)
-    #weight = gd_real(matrix,ans,option,1e-6,1)
-    print 'final weight: \n',weight
-    data = readfile('test')
-    test('train',data,matrix,option)
-    writefile('output.csv',test('test',data,matrix,option))
+    filename = []
+    if len(sys.argv) != 4:
+        print "Wrong format!"
+        sys.exit()
+    else:
+        filename.append(sys.argv[1])
+        filename.append(sys.argv[2])
+        filename.append(sys.argv[3])
+        matrix,ans = readfile('train',filename[0])
+        option = ['PM2.5']
+        #weight = np.random.normal(0, 1, 10)
+        weight = np.ones(10)
+        weight = gd(matrix,ans,weight,1e-5,1,240,0)
+        #weight = gd_real(matrix,ans,option,1e-6,1)
+        print 'Final weight: \n',weight
+        data = readfile('test',filename[1])
+        test('train',data,matrix,option)
+        print "Testing with file",filename[2]
+        writefile(filename[2],test('test',data,matrix,option))
 
     #This part is for the report
     '''
