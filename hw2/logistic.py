@@ -43,6 +43,7 @@ def sigmoid(z):
 
 def logistic(X,Y):
     print "Training..."
+    print "(Sometimes we ecounter 'overflow' or'divided by zero', please restart the program)"
     w= np.random.normal(0,1,106)
     #w= np.ones(106)
     X[:,-1]=1
