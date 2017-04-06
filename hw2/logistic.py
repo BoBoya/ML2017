@@ -2,9 +2,10 @@ import csv,sys,os
 import numpy as np
 from scipy.special import expit
 
-def readfile(filename,type,opt):
+def readfile(file_name,type,opt):
+    print "Reading file: ",file_name
     data = []
-    with open(filename,'rb') as f:
+    with open(file_name,'rb') as f:
         if opt == 'pop':
             for row in csv.reader(f,delimiter=','):
                 data.append(row)
@@ -22,8 +23,9 @@ def readfile(filename,type,opt):
         elif type == 'test':
             return data
 
-def writefile(filename,Y):
-    with open(filename,'w') as f:
+def writefile(file_name,Y):
+    print "Creating output file...",file_name
+    with open(file_name,'w') as f:
         writer = csv.writer(f)
         writer.writerows([['id','label']])
         for i in range(len(Y)):
@@ -34,15 +36,16 @@ def normalize(data):
     index = [0,1,3,4,5]
     for i in index:
         data[:,i] = (data[:,i]-mean[i])/var[i]
-    data[:,-1]=1
 
 def sigmoid(z):
     res = np.divide(1,(float(1)+np.exp(-z)))
     return np.clip(res,0.0000000001,0.9999999999)
 
 def logistic(X,Y):
+    print "Training..."
     w= np.random.normal(0,1,106)
     #w= np.ones(106)
+    X[:,-1]=1
     w[-1]=1.0
     a = 0.001
     itera = 5000
@@ -81,6 +84,7 @@ def validation(X,Y,w):
     print "Accuracy:",1-np.divide(float(wrong),float(len(Y)))
 
 def predict(Test,w):
+    print "Predicting"
     pred = expit(np.dot(Test,w))
     out = []
     for i in range(len(pred)):
@@ -105,7 +109,9 @@ if __name__ == '__main__':
     #validation(X_val,Y_val,w)
     pred = predict(Test,w)
     writefile(filename[5],pred)
-    with open('weight', 'w') as file:
-        file.write('ggggggggg\n')
+    '''
+    with open('weight.txt', 'w') as file:
+        file.write('weight\n')
         for element in w:
             file.write(str(float(element))+'\n')
+    '''

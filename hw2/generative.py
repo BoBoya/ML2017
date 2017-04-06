@@ -6,6 +6,7 @@ from logistic import sigmoid
 dim = 106
 
 def generative(X,Y):
+    print "Computing Guassian Distribution Parameters..."
     size = X.shape[0]
     num1 = np.count_nonzero(Y == 1)
     num0 = np.count_nonzero(Y == 0)
@@ -28,10 +29,11 @@ def generative(X,Y):
     sig1 /= num1
     sig0 /= num0
     s_sig = (float(num1)/size)*sig1 + (float(num0)/size)*sig0
-    print s_sig
+    print "Shared sigma:\n",s_sig
     return (m1,m0,s_sig,num1,num0)
 
 def predict(X_test,m1,m0,sigma,n1,n0):
+    print "Predicting..."
     sig_inv = np.linalg.inv(sigma)
     x = X_test.T
     w = np.dot((m1-m0),sig_inv)
