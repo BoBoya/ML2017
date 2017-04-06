@@ -42,13 +42,13 @@ def sigmoid(z):
 
 def logistic(X,Y):
     w= np.random.normal(0,1,106)
-   # w= np.zeros(106)
+    #w= np.ones(106)
     w[-1]=1.0
     a = 0.001
     itera = 5000
-    lamda = 0.001
+    lamda = 0
     beta_1 = 0.9
-    beta_2 = 0.99
+    beta_2 = 0.999
     epsilon = 10**(-8)
     m = np.zeros(106)
     m_hat = np.zeros(106)
@@ -57,7 +57,7 @@ def logistic(X,Y):
     loss = 0
     for i in range(itera):
         print "Iteration: %d    " % (i+1),
-        pred = sigmoid(np.dot(X,w))
+        pred = expit(np.dot(X,w))
         diffy = np.subtract(pred,Y)
         loss = np.sum(np.negative(Y*np.log(pred)+(1-Y)*(np.log(1-pred))))
         #print "Loss: %f" % float(loss)
@@ -81,7 +81,7 @@ def validation(X,Y,w):
     print "Accuracy:",1-np.divide(float(wrong),float(len(Y)))
 
 def predict(Test,w):
-    pred = sigmoid(np.dot(Test,w))
+    pred = expit(np.dot(Test,w))
     out = []
     for i in range(len(pred)):
         if pred[i] >= 0.5:
