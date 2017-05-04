@@ -8,8 +8,6 @@ from keras.optimizers import SGD, Adam
 from keras.utils import np_utils
 from keras.callbacks import ModelCheckpoint
 from keras.models import load_model,model_from_json
-from alexnet import AlexNet
-#from cifar10 import cifar10
 
 def load_data(test_file):
     print("Loading data from "+test_file)
