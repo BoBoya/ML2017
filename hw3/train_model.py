@@ -9,8 +9,6 @@ from keras.utils import np_utils
 from keras.callbacks import ModelCheckpoint
 from keras.models import load_model,model_from_json
 from keras.preprocessing.image import ImageDataGenerator
-from alexnet import AlexNet
-from GoodNet import GoodNet
 
 def load_data(data_file):
     print("Loading data from "+data_file)
