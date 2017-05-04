@@ -74,7 +74,7 @@ model.compile(loss='categorical_crossentropy',optimizer="adam",metrics=['accurac
 
 model.fit_generator(datagen.flow(x_train, y_train, batch_size=32), 
                     steps_per_epoch = len(x_train)/32, 
-                    epochs=1, 
+                    epochs=200, 
                     validation_data=[x_val,y_val])
 
 #set checkpoint
@@ -91,6 +91,9 @@ score = model.evaluate(x_train,y_train)
 print('\nTraining Acc:', score[1])
 score = model.evaluate(x_val,y_val)
 print('\nValidation Acc:', score[1])
+
+#saving model
+'''
 print("Saving new trained model...")
 model.save('new_trained_model.h5')
-
+'''
