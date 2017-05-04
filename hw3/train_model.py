@@ -62,7 +62,7 @@ loaded_model_json = json_file.read()
 json_file.close()
 model = model_from_json(loaded_model_json)
 model.summary()
-print("Loaded model from hw3_model.json'...")
+print("Loaded model from 'hw3_model.json'...")
 
 
 #training
