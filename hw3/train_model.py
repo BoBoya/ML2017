@@ -8,7 +8,9 @@ from keras.optimizers import SGD, Adam
 from keras.utils import np_utils
 from keras.callbacks import ModelCheckpoint
 from keras.models import load_model,model_from_json
-#from alexnet import AlexNet
+from keras.preprocessing.image import ImageDataGenerator
+from alexnet import AlexNet
+from GoodNet import GoodNet
 
 def load_data(data_file):
     print("Loading data from "+data_file)
@@ -40,38 +42,55 @@ def load_data(data_file):
 
 #load data
 (x_train,y_train),(x_val,y_val)=load_data(sys.argv[1])
+datagen = ImageDataGenerator(
+        rotation_range=10,
+        width_shift_range=0.1,
+        height_shift_range=0.1,
+        horizontal_flip=True)
+
+datagen.fit(x_train)
 
 #load model
-#model2 = AlexNet()
-#model2 = load_model('kaggle-best.h5')
-#model2.summary()
+#model = GoodNet()
+#model = load_model('hw3_model.h5')
+#model.summary()
 
 # load json and create model
-json_file = open('model.json', 'r')
+
+json_file = open('hw3_model.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 model = model_from_json(loaded_model_json)
 model.summary()
-print("Loaded model from 'model.json'...")
+print("Loaded model from hw3_model.json'...")
 
 
 #training
+'''
 model.compile(loss='categorical_crossentropy',optimizer="sgd",metrics=['accuracy'])
 model.fit(x_train,y_train,batch_size=32,epochs=60,validation_data=[x_val,y_val])
+'''
+model.compile(loss='categorical_crossentropy',optimizer="adam",metrics=['accuracy'])
+
+model.fit_generator(datagen.flow(x_train, y_train, batch_size=32), 
+                    steps_per_epoch = len(x_train)/32, 
+                    epochs=1, 
+                    validation_data=[x_val,y_val])
 
 #set checkpoint
 '''
-filepath="weights-5conv-1.best.hdf5"
+filepath="kaggle-update.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 callbacks_list = [checkpoint]
-model.fit(x_train,y_train,batch_size=128,epochs=100,validation_data=[x_val,y_val],callbacks=callbacks_list, verbose=0)
+model.fit(x_train,y_train,batch_size=128,epochs=100,validation_data=[x_val,y_val],callbacks=callbacks_list, verbose=1)
 '''
 
 #evaluation
+
 score = model.evaluate(x_train,y_train)
 print('\nTraining Acc:', score[1])
 score = model.evaluate(x_val,y_val)
 print('\nValidation Acc:', score[1])
-
 print("Saving new trained model...")
 model.save('new_trained_model.h5')
+

@@ -8,6 +8,8 @@ from keras.optimizers import SGD, Adam
 from keras.utils import np_utils
 from keras.callbacks import ModelCheckpoint
 from keras.models import load_model,model_from_json
+from alexnet import AlexNet
+#from cifar10 import cifar10
 
 def load_data(test_file):
     print("Loading data from "+test_file)
@@ -29,35 +31,24 @@ def load_data(test_file):
     return (x_test)
 
 
-#load data
-(x_test) = load_data(sys.argv[1])
 
 #load model
-model = load_model('kaggle-best.h5')
+model = load_model('hw3_model.h5')
 model.compile(loss='categorical_crossentropy',optimizer="sgd",metrics=['accuracy'])
 model.summary()
 
+#load data
+(x_test) = load_data(sys.argv[1])
 
 #predict
 print("Start predicting...")
-pred = model.predict(x_test)
-out = []
-
-for i in range(len(pred)):
-    max = 0
-    num = 0
-    for j in range(7):
-        if pred[i][j] > max:
-            max = pred[i][j]
-            num = j
-    out.append(num)
-
+pred = model.predict_classes(x_test)
 with open(sys.argv[2],'w') as output:
     print("Writing prediction to "+sys.argv[2]+"...")
     writer = csv.writer(output,delimiter=',')
     writer.writerow(['id','label'])
     d = 0
-    for element in out:
+    for element in pred:
         writer.writerow([str(d),str(int(element))])
         d+=1
 
