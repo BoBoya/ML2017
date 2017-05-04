@@ -29,13 +29,13 @@ def grad_ascent(num_step,input_img_data,iter_func):
     return filter_images
 
 def main():
-    emotion_classifier = load_model(sys.argv[1])
+    emotion_classifier = load_model('../hw3_model.h5')
     emotion_classifier.summary()
     layer_dict = dict([layer.name, layer] for layer in emotion_classifier.layers[1:])
     print (layer_dict)
     input_img = emotion_classifier.input
 
-    name_ls = ["conv2d_10","conv2d_8","conv2d_12"]
+    name_ls = ["conv2d_10","conv2d_8"]
     collect_layers = [ layer_dict[name].output for name in name_ls ]
 
     for cnt, c in enumerate(collect_layers):
