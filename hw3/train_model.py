@@ -34,8 +34,8 @@ def load_data(data_file):
     y_train = np_utils.to_categorical(y_train,7)
     
     (x_train,y_train) = (x_train/255,y_train)
-    (x_val,y_val) = (x_train[-7418:],y_train[-7418:])
-    (x_train,y_train)=(x_train[:-7418],y_train[:-7418])
+    (x_val,y_val) = (x_train[-2000:],y_train[-2000:])
+    (x_train,y_train)=(x_train[:-2000],y_train[:-2000])
 
     return (x_train,y_train),(x_val,y_val)
 
