@@ -1,7 +1,2 @@
-PIL
-glob
-matplotlib
 sklearn
-argparse
-word2vec
-ntlk
+numpy
