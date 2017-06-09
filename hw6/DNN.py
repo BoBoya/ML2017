@@ -116,9 +116,9 @@ if __name__ == '__main__':
     test = load_data()
     #model = train_model(train)
     model = get_DNN()
-    
+    testID = test[:,0]
     y_test = model.predict([test[:,1], test[:,2]]).flatten()
     result = []
     for i in range(len(y_test)):
-        result.append([i+1, y_test[i]])
+        result.append([testID[i], y_test[i]])
     write_data(result)
